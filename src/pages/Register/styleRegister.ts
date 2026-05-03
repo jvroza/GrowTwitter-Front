@@ -45,12 +45,12 @@ export const BrandDescription = styled.p`
 
 export const RightPanel = styled.div`
   background: #fff;
-  padding: 48px 40px;
+  padding: 40px;
   width: 380px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 16px;
+  gap: 14px;
 `;
 
 export const FormTitle = styled.h2`
@@ -58,7 +58,7 @@ export const FormTitle = styled.h2`
   font-weight: 700;
   color: #222;
   text-align: center;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 `;
 
 export const FieldGroup = styled.div`
@@ -85,7 +85,7 @@ export const Input = styled.input`
   }
 `;
 
-export const LoginButton = styled.button`
+export const RegisterButton = styled.button`
   background: #1da1f2;
   color: #fff;
   border: none;
@@ -94,7 +94,7 @@ export const LoginButton = styled.button`
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 8px;
+  margin-top: 4px;
   transition: background 0.2s;
 
   &:hover {
@@ -102,19 +102,38 @@ export const LoginButton = styled.button`
   }
 `;
 
-export const RegisterText = styled.p`
-  margin-top: 16px;
-  font-size: 14px;
+export const LoginLink = styled.p`
+  font-size: 13px;
+  color: #888;
   text-align: center;
-  color: #666;
+  margin-top: 4px;
 `;
 
-export const RegisterLink = styled.span`
+export const LoginAnchor = styled.span`
   color: #1da1f2;
-  font-weight: 600;
   cursor: pointer;
+  font-weight: 600;
 
   &:hover {
     text-decoration: underline;
   }
+`;
+export const AvatarPreviewWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
+`;
+
+export const AvatarPreview = styled.img`
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #1da1f2;
+`;
+export const ErrorMessage = styled.p`
+  font-size: 13px;
+  color: #e0245e;
+  text-align: center;
+  margin-bottom: 4px;
 `;

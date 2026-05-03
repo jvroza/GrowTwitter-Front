@@ -1,5 +1,3 @@
-
-
 export interface IUser {
     id: string;
     name: string;
@@ -7,9 +5,8 @@ export interface IUser {
     imageUrl?: string;
 }
 
-export interface ICreateUpdate extends IUser {
+export interface IUserId extends IUser {
     createdAt: string;
-    updatedAt: string;
 }
 
 
@@ -23,9 +20,8 @@ export interface IAuthRegister {
 }
 
 export interface IAuthRegisterResponse {
-    success: boolean;
-    message: string;
-    data: ICreateUpdate;
+    user: IUserId;
+    token: string;
 }
 
 //TIPAGEM PARA FAZER LOGIN
@@ -42,4 +38,22 @@ export interface IAuthLoginResponse {
         authToken: string,
         authUser: IUser;
     }
+}
+
+// TIPAGEM PARA SEGUIR USUARIO (FOLLOWERS)
+export interface IFollowUser {
+    userId: string;
+}
+
+// TIPAGEM PARA LISTAR SEGUIDORES
+export interface IUserBasic {
+    id: string,
+    name: string,
+    username: string
+    imageUrl?: string;
+}
+
+export interface IGetFollowers {
+    followers: IUserBasic[];
+    following: IUserBasic[];
 }

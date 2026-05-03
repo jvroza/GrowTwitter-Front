@@ -1,10 +1,17 @@
-import {createBrowserRouter, Navigate} from "react-router";
+import { createBrowserRouter, Navigate } from "react-router";
 import { LayoutOutlet } from "./Layout/LayoutOutlet.tsx";
-import {ProtectedRoutes} from "./components/ProtectedRoutes.tsx";
+import { ProtectedRoutes } from "./components/Protected/ProtectedRoutes.tsx";
+import { Login } from "./pages/Login/login.tsx";
+import { Feed } from "./pages/Feed/feed.tsx";
+import { Explore } from "./pages/Explore/explore.tsx";
+import { Profile } from "./pages/Profile/Profile.tsx";
+import { Register } from "./pages/Register/registerUser.tsx";
+import { ProfileProvider } from "./context/ProfileContext.tsx";
+import {TweetProvider} from "./context/TweetContext.tsx";
 
 export const routes = createBrowserRouter([
-    { path: "/login", element: <h1>Login</h1> },
-    { path: "/register", element: <h1>Register</h1> },
+    { path: "/login", element: <Login /> },
+    { path: "/register", element: <Register />},
 
     {
         path: "/",
@@ -16,19 +23,27 @@ export const routes = createBrowserRouter([
         children: [
             {
                 index: true,
-                element: <Navigate to= "/feed" replace />
+                element: <Navigate to= "/login" replace />
             },
             {
                 path: "/feed",
-                element: <h1>Feed</h1>
+                element: (
+                    <TweetProvider>
+                        <Feed />
+                    </TweetProvider>
+                )
             },
             {
                 path: "/explore",
-                element: <h1>Explore</h1>
+                element: <Explore />
             },
             {
                 path: "/profile",
-                element: <h1>Profile</h1>
+                element: (
+                    <ProfileProvider >
+                        <Profile />
+                    </ProfileProvider>
+                )
             },
         ]
     }

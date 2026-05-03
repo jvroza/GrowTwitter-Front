@@ -3,7 +3,7 @@ import type {
     IAuthLoginResponse,
     IAuthRegister,
     IAuthRegisterResponse,
-} from "../types/typesUsers.ts";
+} from "../types/typesAuth.ts";
 import { api } from "./api";
 
 
