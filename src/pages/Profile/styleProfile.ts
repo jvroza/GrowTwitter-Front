@@ -158,3 +158,19 @@ export const ActionBtn = styled.button`
     color: #1da1f2;
   }
 `;
+
+export const FollowButton = styled.button`
+    margin-top: 12px;
+    background: #1d9bf0;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+        background: #1a8cd8;
+    }
+`;

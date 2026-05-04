@@ -1,4 +1,4 @@
-import type {IFollowUser, IGetFollowers, IUser, IUserId} from "../types/typesAuth.ts";
+import type { IFollowUser, IGetFollowers, IUser, IUserBasic, IUserId } from "../types/typesAuth.ts";
 import { api } from "./api";
 
 
@@ -19,26 +19,22 @@ export async function user (): Promise<IUser[]> {
 }
 
 // BUSCA USUARIO POR ID.
-
-export async function userByid () : Promise<IUserId> {
-
+export async function userByid(): Promise<IUserId> {
     try {
-
-        const userId = localStorage.getItem("userId");
+        const storedUser = localStorage.getItem("user");
+        const userId = storedUser ? JSON.parse(storedUser).id : null;
 
         if (!userId) {
-            throw new Error("userId não encontrado no localStorage")
+            throw new Error("userId não encontrado no localStorage");
         }
 
-        const userIdResponse = await api.get<IUserId>(`/users/${userId}`);
+        const userIdResponse = await api.get<{ success: boolean; data: IUserId }>(`/users/${userId}`);
+        return userIdResponse.data.data;
 
-        return userIdResponse.data;
-
-    } catch (error){
+    } catch (error) {
         console.log("Erro ao buscar usuário por id", error);
         throw error;
     }
-
 }
 
 // SEGUE UM NOVO USUARIO
@@ -73,14 +69,20 @@ export async function delFollowe (data: IFollowUser) : Promise<void> {
 // LISTAR SEGUIDORES
     export async function followers () : Promise<IGetFollowers> {
 
-    try {
+        try {
+            const responseFollowers = await api.get<{
+                success: boolean;
+                data: { followers: IUserBasic[]; followings: IUserBasic[] };
+            }>("/followers");
 
-        const responseFollowers = await api.get<IGetFollowers>("/followers");
-        return responseFollowers.data;
+            return {
+                followers: responseFollowers.data.data.followers,
+                following: responseFollowers.data.data.followings,
+            };
 
-    } catch (error) {
-        console.log("Erro ao listar seguidores", error);
-        throw error;
-    }
+        } catch (error) {
+            console.log("Erro ao listar seguidores", error);
+            throw error;
+        }
 
 }

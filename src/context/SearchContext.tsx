@@ -30,12 +30,16 @@ export function SearchProvider({ children }: Readonly<SearchProviderProps>) {
     useEffect(() => {
         async function loadUsers() {
             try {
-                const [usersData, followersResult] = await Promise.all([
+                const [usersResponse, followersResult] = await Promise.all([
                     user(),
                     followers(),
                 ]);
 
-                const filtered = usersData.filter((u) => u.id !== loggedUserId);
+                const usersArray = Array.isArray(usersResponse)
+                    ? usersResponse
+                    : (usersResponse as unknown as { data: IUser[] }).data ?? [];
+
+                const filtered = usersArray.filter((u) => u.id !== loggedUserId);
                 setUsers(filtered);
                 setFollowersData(followersResult);
 
@@ -50,7 +54,8 @@ export function SearchProvider({ children }: Readonly<SearchProviderProps>) {
     }, []);
 
     function isFollowing(userId: string): boolean {
-        return followersData?.following.some((f) => f.id === userId) ?? false;
+        if (!followersData?.following) return false;
+        return followersData.following.some((f) => f.id === userId);
     }
 
     async function follow(userId: string) {

@@ -85,11 +85,11 @@ export async function delTweet (data: ITweetId): Promise<void> {
 }
 
 // LISTA TWEETS DE UM USUÁRIO
-export async function listTweetsId (data: { id: string }): Promise<IGetTweetResponse[]> {
+export async function listTweetsId(data: { id: string }): Promise<IApiResponse<IGetTweetResponse[]>> {
 
     try {
 
-        const response = await api.get<IGetTweetResponse[]>(`/users/${data.id}/tweets`);
+        const response = await api.get<IApiResponse<IGetTweetResponse[]>>(`/users/${data.id}/tweets`);
         return response.data;
 
     } catch (error){

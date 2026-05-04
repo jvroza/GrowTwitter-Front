@@ -1,6 +1,6 @@
-import { useAuth } from "../../hooks/useAuth.ts";
 import { useNavigate } from "react-router";
 import {type ReactNode, useEffect} from "react";
+import {useAuth} from "../../hooks/useAuth.ts";
 
 interface ProtectedRoutesProps {
     children: ReactNode;

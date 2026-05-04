@@ -34,8 +34,8 @@ export interface IAuthLogin {
 export interface IAuthLoginResponse {
     success: boolean;
     message: string;
-    data : {
-        authToken: string,
+    data: {
+        authToken: string;
         authUser: IUser;
     }
 }

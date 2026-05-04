@@ -8,6 +8,8 @@ import { Profile } from "./pages/Profile/Profile.tsx";
 import { Register } from "./pages/Register/registerUser.tsx";
 import { ProfileProvider } from "./context/ProfileContext.tsx";
 import {TweetProvider} from "./context/TweetContext.tsx";
+import { Search } from "./pages/Search/search.tsx";
+import { SearchProvider } from "./context/SearchContext.tsx";
 
 export const routes = createBrowserRouter([
     { path: "/login", element: <Login /> },
@@ -17,7 +19,9 @@ export const routes = createBrowserRouter([
         path: "/",
         element: (
             <ProtectedRoutes>
-                <LayoutOutlet />
+                <TweetProvider>
+                    <LayoutOutlet />
+                </TweetProvider>
             </ProtectedRoutes>
         ),
         children: [
@@ -27,11 +31,7 @@ export const routes = createBrowserRouter([
             },
             {
                 path: "/feed",
-                element: (
-                    <TweetProvider>
-                        <Feed />
-                    </TweetProvider>
-                )
+                element: <Feed />
             },
             {
                 path: "/explore",
@@ -44,6 +44,14 @@ export const routes = createBrowserRouter([
                         <Profile />
                     </ProfileProvider>
                 )
+            },
+            {
+                path: "/search",
+                element: (
+                    <SearchProvider>
+                        <Search />
+                    </SearchProvider>
+                ),
             },
         ]
     }

@@ -1,19 +1,24 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./styleProfile";
 import { useProfile } from "../../hooks/useProfile";
-import { delTweet } from "../../services/tweet";
 
 export function Profile() {
     const navigate = useNavigate();
-    const { profileUser, tweets, isLoading } = useProfile();
+    const { profileUser, tweets, isLoading, deleteTweet } = useProfile();
+    const [deletingId, setDeletingId] = useState<string | null>(null);
 
     if (isLoading) return <p>Carregando...</p>;
 
     async function handleDelete(tweetId: string) {
+        if (deletingId) return;
         try {
-            await delTweet({ tweetId });
+            setDeletingId(tweetId);
+            await deleteTweet(tweetId);
         } catch (error) {
             console.log("Erro ao deletar tweet", error);
+        } finally {
+            setDeletingId(null);
         }
     }
 
@@ -57,7 +62,12 @@ export function Profile() {
                         <S.TweetActions>
                             <S.ActionBtn>💬 {tweet.replies.length}</S.ActionBtn>
                             <S.ActionBtn>🤍 {tweet.likes}</S.ActionBtn>
-                            <S.ActionBtn onClick={() => handleDelete(tweet.id)}>🗑️</S.ActionBtn>
+                            <S.ActionBtn
+                                onClick={() => handleDelete(tweet.id)}
+                                disabled={deletingId === tweet.id}
+                            >
+                                {deletingId === tweet.id ? "⏳" : "🗑️"}
+                            </S.ActionBtn>
                         </S.TweetActions>
                     </S.TweetContent>
                 </S.TweetCard>

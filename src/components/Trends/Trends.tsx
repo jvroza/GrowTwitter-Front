@@ -1,4 +1,4 @@
-import * as S from "./styleTrends";
+import * as S from "./styleTrends.ts";
 
 const trendList = [
     { category: "Esportes · Há 45 min", title: "Assunto sobre esportes" },
@@ -7,7 +7,7 @@ const trendList = [
     { category: "Cinema · Assunto do Momento", title: "Assunto sobre Filmes e Cinema" },
 ];
 
-export const Trends = () => {
+export function Trends() {
     return (
         <S.Container>
             <S.Panel>
@@ -22,4 +22,4 @@ export const Trends = () => {
             </S.Panel>
         </S.Container>
     );
-};
+}

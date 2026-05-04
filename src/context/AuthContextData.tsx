@@ -1,6 +1,7 @@
 import type {IAuthLogin, IAuthRegister, IUser} from "../types/typesAuth.ts";
 import { createContext, type ReactNode, useEffect, useState, useMemo } from "react";
 import {login, register} from "../services/login.ts";
+import { api } from "../services/api";
 
 interface IAuthContextData {
     user: IUser | null;
@@ -41,31 +42,34 @@ export function AuthProvider({ children }: Readonly<AuthProviderProps>) {
         setIsLoading(false);
     },[]);
 
-    async function signIn (dadosUser: IAuthLogin) {
-
-        try{
-
+    async function signIn(dadosUser: IAuthLogin) {
+        try {
             const response = await login(dadosUser);
-            const user = response.data?.authUser
-            const token = response.data?.authToken
+            const user = response.data?.authUser;
+            const token = response.data?.authToken;
 
-
-            if(!token || !user) {
+            if (!token || !user) {
                 console.log("Token ou usuário não encontrados");
                 return;
             }
 
-            setUser(user)
+            // Seta o token no Axios ANTES de fazer qualquer outra requisição
+            api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+            // Agora busca dados completos com token já configurado
+            const fullUserResponse = await api.get<{ data: IUser }>(`/users/${user.id}`);
+            const fullUser = fullUserResponse.data.data;
+
+            setUser(fullUser);
             setToken(token);
 
             localStorage.setItem("token", token);
-            localStorage.setItem("user", JSON.stringify(user))
+            localStorage.setItem("user", JSON.stringify(fullUser));
 
-        } catch (error){
+        } catch (error) {
             console.log("Erro ao fazer login", error);
             throw error;
         }
-
     }
 
     async function signUp (dadosUser: IAuthRegister) {

@@ -1,6 +1,6 @@
 import { createContext, useEffect, useState, useMemo, type ReactNode } from "react";
 import { userByid, followers } from "../services/user";
-import { listTweetsId } from "../services/tweet";
+import { listTweetsId, delTweet } from "../services/tweet";
 import type { IUserId, IGetFollowers } from "../types/typesAuth";
 import type { IGetTweetResponse } from "../types/typesTeweets";
 
@@ -9,6 +9,7 @@ interface IProfileContextData {
     tweets: IGetTweetResponse[];
     followersData: IGetFollowers | null;
     isLoading: boolean;
+    deleteTweet: (tweetId: string) => Promise<void>;
 }
 
 interface ProfileProviderProps {
@@ -25,32 +26,42 @@ export function ProfileProvider({ children }: Readonly<ProfileProviderProps>) {
     const [followersData, setFollowersData] = useState<IGetFollowers | null>(null);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => {
-        async function loadProfile() {
-            try {
-                const userData = await userByid();
-                const tweetsData = await listTweetsId({ id: userData.id });
-                const followersResult = await followers();
+    async function loadProfile() {
+        try {
+            const userData = await userByid();
+            const tweetsData = await listTweetsId({ id: userData.id });
+            const followersResult = await followers();
 
-                setProfileUser(userData);
-                setTweets(tweetsData);
-                setFollowersData(followersResult);
-
-            } catch (error) {
-                console.log("Erro ao carregar perfil", error);
-            } finally {
-                setIsLoading(false);
-            }
+            setProfileUser(userData);
+            setTweets(tweetsData.data ?? []);
+            setFollowersData(followersResult);
+        } catch (error) {
+            console.log("Erro ao carregar perfil", error);
+        } finally {
+            setIsLoading(false);
         }
+    }
 
+    useEffect(() => {
         loadProfile();
     }, []);
+
+    async function deleteTweet(tweetId: string) {
+        try {
+            await delTweet({ tweetId });
+            setTweets((prev) => prev.filter((t) => t.id !== tweetId));
+        } catch (error) {
+            console.log("Erro ao deletar tweet", error);
+            throw error;
+        }
+    }
 
     const value = useMemo(() => ({
         profileUser,
         tweets,
         followersData,
         isLoading,
+        deleteTweet,
     }), [profileUser, tweets, followersData, isLoading]);
 
     return (
@@ -59,4 +70,3 @@ export function ProfileProvider({ children }: Readonly<ProfileProviderProps>) {
         </ProfileContext.Provider>
     );
 }
-

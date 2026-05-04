@@ -10,7 +10,7 @@ const trends = [
     { category: "Daphne · Principal Assunto do Momento", title: "Assunto sobre a Daphne" },
 ];
 
-export const Explore = () => {
+export function Explore() {
     return (
         <S.Container>
             <S.PageTitle>Explorar</S.PageTitle>
@@ -24,5 +24,5 @@ export const Explore = () => {
             </S.TrendList>
         </S.Container>
     );
-};
+}
 

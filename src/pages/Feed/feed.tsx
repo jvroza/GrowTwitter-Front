@@ -1,9 +1,14 @@
+import { useEffect } from "react";
 import { TweetCard } from "../../components/Tweets/TweetCards";
 import { useTweet } from "../../hooks/useTweet";
 import * as S from "./styleFeed";
 
 export function Feed() {
-    const { tweets, isLoading } = useTweet();
+    const { tweets, isLoading, refreshFeed } = useTweet();
+
+    useEffect(() => {
+        refreshFeed();
+    }, []);
 
     if (isLoading) return <p>Carregando...</p>;
 
